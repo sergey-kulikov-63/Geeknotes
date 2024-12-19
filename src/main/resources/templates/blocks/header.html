@@ -1,0 +1,39 @@
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      th:fragment="header">
+<header class="header">
+    <div>
+        <a href="/">
+            <button>Главная</button>
+        </a>
+    </div>
+    <div>
+        <a sec:authorize="isAnonymous()" href="/login">
+            <button>Вход</button>
+        </a>
+        <a sec:authorize="isAuthenticated()" th:href="'/users/' + ${#authentication.getName()}">
+            <button>Мой профиль</button>
+        </a>
+        <a sec:authorize="hasRole('ADMIN')" href="/posts/pre-posts/create-pre-post">
+            <button>Добавить новый пост</button>
+        </a>
+        <a sec:authorize="hasRole('ADMIN')" href="/posts/pre-posts">
+            <button>Неопубликованные посты</button>
+        </a>
+    </div>
+</header>
+<style>
+    .header {
+        background: #cccccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        top: 0;
+    }
+    header button {
+        padding: 10px;
+        font-size: 16px;
+    }
+</style>
+</html>

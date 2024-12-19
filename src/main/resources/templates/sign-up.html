@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+<div class="container">
+    <h1>Регистрация</h1>
+    <form th:action="@{/sign-up}" method="post" enctype="multipart/form-data">
+        <input type="text" name="userName" required placeholder="Имя">
+        <input type="text" name="userLogin" required placeholder="Логин">
+        <input type="email" name="userEmail" required placeholder="Email">
+        <input type="password" name="userPassword" required placeholder="Пароль">
+        <input type="password" name="submitUserPassword" required placeholder="Повторите пароль">
+        <button type="submit">Зарегистрироваться</button>
+        <div th:if="${error}" class="error">
+            <p th:text="${error}"></p>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+    }
+    .container {
+        width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+</style>

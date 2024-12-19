@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все записи</title>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<div style="margin: 20px 15em">
+    <form class="search-by" action="/posts" method="get">
+        <input type="text" placeholder="Поиск по названию..." name="query" id="searchInput">
+        <ul id="suggestions" style="display: none" class="suggestions-table">
+            <li th:each="title:${titles}" th:text="${title}" class="suggestion-item"></li>
+            <li id="no-results" style="display: none; text-align: center">Ничего не найдено</li>
+        </ul>
+    </form>
+    <div class="post" th:each="post : ${posts}">
+        <a th:href="'/posts/' + ${post.getPostUrl()}">
+            <div>
+                <h2 th:text="${post.getPostTitle()}"></h2>
+                <img th:if="${post.hasImage()}" th:src="${post.getPostImg()}">
+                <p th:text="${post.getPostDescription()}"></p>
+            </div>
+        </a>
+    </div>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            let activeIndex = -1;
+
+            document.querySelector('.suggestions-table').style.width = `${searchInput.offsetWidth}px`;
+
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.trim().toLowerCase();
+                document.getElementById('suggestions').style.display = query ? 'block' : 'none';
+                filterSuggestions(query);
+                activeIndex = -1;
+            });
+
+            document.getElementById('suggestions').addEventListener('click', (event) => {
+                if (event.target.id !== 'no-results') {
+                    searchInput.value = event.target.textContent;
+                    document.getElementById('suggestions').style.display = 'none';
+                    window.location.href = `/posts?query=${searchInput.value}`;
+                }
+            });
+
+            searchInput.addEventListener('keydown', (event) => {
+                const items = document.querySelectorAll('.suggestion-item');
+                if (event.key === 'ArrowDown') {
+                    activeIndex = Math.min(activeIndex + 1, items.length - 1);
+                    updateActiveItem(items);
+                } else if (event.key === 'ArrowUp') {
+                    activeIndex = Math.max(activeIndex - 1, 0);
+                    updateActiveItem(items);
+                } else if (event.key === 'Enter' && activeIndex >= 0) {
+                    event.preventDefault();
+                    searchInput.value = items[activeIndex].textContent;
+                    document.getElementById('suggestions').style.display = 'none';
+                    window.location.href = `/posts?query=${searchInput.value}`;
+                }
+            });
+
+            function updateActiveItem(items) {
+                items.forEach((item, index) => {
+                    item.classList.toggle('active', index === activeIndex);
+                });
+            }
+
+            function filterSuggestions(query) {
+                let visibleCount = 0;
+                let hasResults = false;
+                document.querySelectorAll('.suggestion-item').forEach(item => {
+                    if (item.id === 'no-results') return; // Пропускаем элемент "Ничего не найдено"
+                    const title = item.textContent.toLowerCase();
+                    const shouldShow = title.startsWith(query) || title.includes(query);
+                    item.style.display = shouldShow ? 'block' : 'none';
+                    if (shouldShow) {
+                        hasResults = true;
+                        if (visibleCount++ >= 5); // Показываем только 5 элементов
+                    }
+                });
+                document.getElementById('no-results').style.display = hasResults ? 'none' : 'block';
+            }
+        });
+    </script>
+</div>
+</body>
+</html>
+<style>
+    body {
+        margin: 0;
+    }
+    .suggestions-table {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        background: #ffffff;
+        position: absolute;
+        z-index: 1;
+        box-sizing: border-box;
+    }
+    .suggestion-item {
+        cursor: pointer;
+        padding: 5px;
+        border: black 1px solid;
+    }
+    .suggestion-item:hover, .suggestion-item.active {
+        background: #e1e1e1;
+    }
+    .post {
+        background: #eaeaea;
+        border: #000000 solid 1px;
+        margin-top: 25px;
+    }
+    .search-by input {
+        width: 100%;
+        height: 50px;
+    }
+    .post img {
+        margin: 10px 1%;
+        width: 98%;
+        object-fit: cover;
+    }
+    .post h2, .post p {
+        margin: 10px;
+    }
+    a, p {
+        color: black;
+        text-decoration: none;
+    }
+</style>

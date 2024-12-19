@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.getPostTitle()}"></title>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<div class="post-container">
+    <img th:if="${post.hasImage()}" th:src="${post.getPostImg()}">
+    <h1 th:text="${post.getPostTitle()}"></h1>
+    <hr>
+    <div th:utext="${post.getPostText()}"></div>
+    <hr>
+    <p>Тэги:</p>
+    <div th:each="tag : ${post.getPostTags()}" class="tags" th:text="${tag.getTagName()}"></div>
+</div>
+<h2 align="center">Комментарии</h2>
+<div sec:authorize="isAnonymous()" class="comments">
+    <i style="color: #707070">Комментировать и просматривать комментарии могут только авторизованные пользователи</i>
+</div>
+<div sec:authorize="isAuthenticated()" class="comments">
+    <div th:if="${post.getPostComments().isEmpty()}">
+        <i>Комментариев пока нет</i>
+    </div>
+    <div th:each="comment : ${post.getPostComments()}" class="comment">
+        <a th:href="'/users/' + ${comment.getUser().getUserLogin()}">
+            <div class="name" th:text="${comment.getUser().getUserName()}"></div>
+        </a>
+        <div th:text="${comment.getContent()}"></div>
+    </div>
+</div>
+<form sec:authorize="isAuthenticated()" th:action="'/posts/' + ${post.getPostUrl()} + '/comment'" method="post" class="comment-form">
+    <div class="form-container">
+        <textarea name="commentContent" placeholder="Добавьте комментарий" required></textarea>
+        <button class="button" type="submit">+</button>
+    </div>
+</form>
+<div sec:authorize="hasRole('ADMIN')" class="admin-controls">
+    <a th:href="'/posts/' + ${post.getPostUrl()} + '/update'">
+        <button class="button">Редактировать</button>
+    </a>
+    <form th:action="'/posts/' + ${post.getPostUrl()} + '/delete'" method="post">
+        <button class="button" type="submit">Удалить</button>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    body {
+        margin: 0;
+    }
+    .post-container {
+        background: #eaeaea;
+        border: #000 solid 1px;
+        padding: 20px;
+        margin: 20px 15em 25px;
+    }
+    .post-container img {
+        margin: 10px 1%;
+        width: 98%;
+        object-fit: cover;
+    }
+    .post-container h1 {
+        margin: 10px 0;
+    }
+    .post-container hr {
+        margin: 15px 0;
+    }
+    .tags {
+        display: inline-block;
+        margin-right: 8px;
+        padding: 5px;
+        background: #cccccc;
+    }
+    .comments {
+        margin: 25px 15em 20px;
+        background: #ffffff;
+        padding: 15px;
+        border: #000 solid 1px;
+    }
+    .comment {
+        margin: 10px 0;
+        padding: 10px;
+        background: #f5f5f5;
+        border: #ddd solid 1px;
+    }
+    .comment .name {
+        font-weight: bold;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #b6b6b6;
+    }
+    .comment-form {
+        margin: 25px 15em 20px;
+        border: #000 solid 1px;
+    }
+    .form-container {
+        display: flex;
+    }
+    .form-container textarea {
+        width: 90%;
+        height: 50px;
+        padding: 10px;
+        resize: none;
+    }
+    .form-container button {
+        width: 10%;
+        height: auto;
+    }
+    .button {
+        padding: 10px;
+        font-size: 16px;
+    }
+    a, p {
+        color: black;
+        text-decoration: none;
+    }
+    .admin-controls {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 50px 0;
+    }
+</style>

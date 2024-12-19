@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать репост</title>
+</head>
+<body>
+<div class="post-container">
+  <form th:action="'/posts/pre-posts/' + ${prepost.getPrePostUrl()} + '/update'" method="post">
+    <input type="text" name="prePostTitle" th:value="${prepost.getPrePostTitle()}" required><br><br>
+    <input type="text" name="prePostDescription" th:value="${prepost.getPrePostDescription()}" required><br><br>
+    <textarea  name="prePostText" th:text="${prepost.getPrePostText()}" required></textarea><br><br>
+    <button type="submit">Сохранить изменения</button>
+  </form>
+  <a th:href="'/posts/pre-posts/' + ${prepost.getPrePostUrl()}">
+    <button>Отмена</button>
+  </a>
+</div>
+</body>
+</html>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #e8e8e8;
+    text-align: center;
+  }
+  form {
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    margin-left: 15%;
+    margin-right: 15%;
+    padding: 20px;
+  }
+  form hr {
+    height: 1px;
+  }
+  button {
+    padding: 10px;
+    font-size: 16px;
+  }
+  input, textarea {
+    background-color: #f3f3f3;
+    font-size: 14px;
+    padding: 8px;
+    width: 98%;
+    margin-bottom: 10px;
+  }
+  textarea {
+    height: 350px;
+  }
+</style>

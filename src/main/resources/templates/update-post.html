@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать пост</title>
+</head>
+<body>
+    <form th:action="'/posts/' + ${post.getPostUrl()} + '/update'" method="post">
+        <input type="text" name="postTitle" th:value="${post.getPostTitle()}" required><br><br>
+        <input type="text" name="postDescription" th:value="${post.getPostDescription()}" required><br><br>
+        <textarea style="height: 50em"  name="postText" required th:text="${post.getPostText()}"></textarea><br><br>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+    <a th:href="'/posts/' + ${post.getPostUrl()}">
+        <button>Отмена</button>
+    </a>
+</body>
+</html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #e8e8e8;
+        text-align: center;
+    }
+    form {
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        margin-left: 15%;
+        margin-right: 15%;
+        padding: 20px;
+    }
+    form hr {
+        height: 1px;
+    }
+    button {
+        padding: 10px;
+        font-size: 16px;
+    }
+    input, textarea {
+        background-color: #f3f3f3;
+        font-size: math;
+        padding: 8px;
+        width: 98%;
+    }
+</style>

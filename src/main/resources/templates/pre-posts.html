@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все неопубликованные записи</title>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<div class="prepost" th:each="prepost : ${preposts}">
+    <a th:href="'/posts/pre-posts/' + ${prepost.getPrePostUrl()}">
+        <div>
+            <h2 th:text="${prepost.getPrePostTitle()}"></h2>
+            <img th:if="${prepost.hasImage()}" th:src="${prepost.getPrePostImgBase64()}">
+            <p th:text="${prepost.getPrePostDescription()}"></p>
+        </div>
+    </a>
+</div>
+</body>
+</html>
+<style>
+    body {
+        margin: 0;
+    }
+    .prepost {
+        background: #eaeaea;
+        border: #000000 solid 1px;
+        margin: 25px 15em 20px;
+    }
+    .prepost img {
+        margin: 10px 1%;
+        width: 98%;
+        object-fit: cover;
+    }
+    .prepost h2, .prepost p {
+        margin: 10px;
+    }
+    a, p {
+        color: black;
+        text-decoration: none;
+    }
+</style>

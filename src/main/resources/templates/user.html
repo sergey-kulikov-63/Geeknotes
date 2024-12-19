@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.getUserName()}">Профиль пользователя</title>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<div class="profile-container">
+    <div class="profile-header">
+        <img th:if="${user.hasImage()}" th:src="${user.getUserAvatar()}" class="avatar">
+        <div class="user-info">
+            <h1 th:text="${user.getUserName()}"></h1>
+            <p>Email:</p>
+            <h3 th:text="${user.getUserEmail()}"></h3>
+        </div>
+    </div>
+    <p>О себе:</p>
+    <h3 th:text="${user.getUserAbout()}"></h3>
+    <a th:if="${#authentication.getName() == user.getUserLogin()}" th:href="'/users/' + ${user.getUserLogin()} + '/update'">
+        <button class="button">Редактировать</button>
+    </a>
+    <form th:if="${#authentication.getName() == user.getUserLogin()}" th:action="@{/logout}" method="post">
+        <button class="button" style="background: red; color: white" type="submit">Выйти</button>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #e8e8e8;
+    }
+    .profile-container {
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        margin-left: 15%;
+        margin-right: 15%;
+        padding: 20px;
+    }
+    .user-info {
+        margin-top: 30px;
+    }
+    .profile-header {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    .avatar {
+        margin-right: 15px;
+    }
+    p {
+        font-size: 1em;
+        color: #777;
+        margin-bottom: -10px;
+    }
+    .button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+</style>

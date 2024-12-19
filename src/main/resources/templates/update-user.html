@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать профиль</title>
+</head>
+<body>
+<div class="container">
+    <h1>Редактировать профиль</h1>
+    <form th:action="'/users/' + ${user.getUserLogin()} + '/update'" method="post" enctype="multipart/form-data">
+            <input type="text" placeholder="Имя пользователя" name="userName" th:value="${user.getUserName()}" required />
+            <input type="file"  name="userAvatar" />
+            <input type="email" placeholder="Email" name="userEmail" th:value="${user.getUserEmail()}" required />
+            <textarea placeholder="О себе" name="userAbout" th:text="${user.getUserAbout()}"></textarea>
+            <button type="submit">Сохранить изменения</button>
+    </form>
+    <div class="cancel-link">
+        <a th:href="'/users/' + ${user.getUserLogin()}">Отменить</a>
+    </div>
+</div>
+</body>
+</html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e8e8e8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 600px;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    input {
+        margin-bottom: 50px;
+    }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+    }
+    textarea {
+        resize: vertical;
+        height: 150px;
+        margin-bottom: 25px;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .cancel-link {
+        text-align: center;
+        margin-top: 15px;
+    }
+    .cancel-link a {
+        text-decoration: none;
+        color: #555;
+        font-size: 14px;
+    }
+</style>
